@@ -13,8 +13,12 @@ public class ServicoLogin {
 
     public static int login(String usernameInput, String passwordInput) {
         loadCredentials();
-
-        return Integer.parseInt(Tipo);
+      
+        if(usernameInput.equals(Login) && passwordInput.equals(Senha)) { 
+        	return Integer.parseInt(Tipo);
+	    } else{
+	    	return 0;
+	    }
     }
 
     private static void loadCredentials() {

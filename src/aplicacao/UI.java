@@ -1,5 +1,6 @@
 package aplicacao;
 
+import java.util.List;
 import java.util.Scanner;
 
 import servicos.ServicoLogin;
@@ -23,6 +24,7 @@ public class UI {
 	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+	private static final String DELIMITADOR = ";";
 	
 	
 	public static void bemVindoTela() {
@@ -56,17 +58,17 @@ public class UI {
 			  System.out.println("1 - Ver dados da Conta");
 			  System.out.println("2 - Depósito");
 			  System.out.println("3 - Saque");
-			  System.out.println("5 - Transferir");
+			  System.out.println("4 - Transferir");
 			  System.out.println("5 - Alterar dados da Conta");
-			  System.out.println("4 - Alterar limite do cartão");
-			  System.out.println("5 - Exportar dados de transações");
+			  System.out.println("6 - Alterar limite do cartão");
+			  System.out.println("7 - Exportar dados de transações");
 		    break;
 		  case 2:
 			  // Caixa
 			  System.out.println("1 - Ver dados da Conta");
 			  System.out.println("2 - Depósito");
 			  System.out.println("3 - Saque");
-			  System.out.println("5 - Transferir");
+			  System.out.println("4 - Transferir");
 			  System.out.println("5 - Alterar dados da Conta");
 		    break;
 		  default:
@@ -74,9 +76,37 @@ public class UI {
 			  System.out.println("1 - Ver dados da Conta");
 			  System.out.println("2 - Depósito");
 			  System.out.println("3 - Saque");
-			  System.out.println("5 - Transferir");
+			  System.out.println("4 - Transferir");
 		}
 		return sc.nextInt();
+	}
+	
+	public static String buscaConta(Scanner sc) {
+		 System.out.println("Por favor digite o número da conta");
+		 return sc.nextLine();
+	}
+
+
+	public static void mostrarConta(String verContaBancaria) {
+		String[] dados = verContaBancaria.split(DELIMITADOR);
+		System.out.print(ANSI_RESET);
+		System.out.println("==============================================");
+		System.out.println("|    "+ANSI_YELLOW+"          Detalhes da conta"+ANSI_RESET+"             |");
+		System.out.println("==============================================");
+		System.out.println("|  Agencia: " +ANSI_CYAN+ dados[1] + " Numero da conta: "+ ANSI_CYAN + dados[0]+ANSI_RESET+"   |");
+		System.out.println("|  Tipo de conta: " +ANSI_CYAN+ dados[4]+ANSI_RESET+"                   |");
+		System.out.print("|  Saldo da conta: ");
+		if(Double.valueOf(dados[3]) < 0)
+			System.out.print(ANSI_RED);
+		else 
+			System.out.print(ANSI_CYAN);
+		System.out.print(dados[3]);
+		System.out.println(ANSI_RESET+"                    |");		
+		System.out.println("|  Limite para compras: " +ANSI_CYAN+ dados[4]+ANSI_RESET+"             |");
+		System.out.println("==============================================");
+		System.out.println();
+		System.out.println();
+		
 	}
 }
 
