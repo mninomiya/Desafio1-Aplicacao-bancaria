@@ -16,7 +16,7 @@ public class ServicoLogin {
       
         if(usernameInput.equals(Login) && passwordInput.equals(Senha)) { 
         	return Integer.parseInt(Tipo);
-	    } else{
+	    } else {
 	    	return 0;
 	    }
     }

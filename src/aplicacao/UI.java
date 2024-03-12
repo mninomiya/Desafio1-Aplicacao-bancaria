@@ -62,6 +62,8 @@ public class UI {
 			  System.out.println("5 - Alterar dados da Conta");
 			  System.out.println("6 - Alterar limite do cartão");
 			  System.out.println("7 - Exportar dados de transações");
+			  System.out.println("8 - Voltar ao menu principal");
+			  System.out.println("9 - Sair");
 		    break;
 		  case 2:
 			  // Caixa
@@ -70,6 +72,8 @@ public class UI {
 			  System.out.println("3 - Saque");
 			  System.out.println("4 - Transferir");
 			  System.out.println("5 - Alterar dados da Conta");
+			  System.out.println("8 - Voltar ao menu principal");
+			  System.out.println("9 - Sair");
 		    break;
 		  default:
 			  // Cliente
@@ -77,6 +81,9 @@ public class UI {
 			  System.out.println("2 - Depósito");
 			  System.out.println("3 - Saque");
 			  System.out.println("4 - Transferir");
+			  System.out.println("8 - Voltar ao menu principal");
+			  System.out.println("9 - Sair");
+			  break;
 		}
 		return sc.nextInt();
 	}
@@ -96,16 +103,35 @@ public class UI {
 		System.out.println("|  Agencia: " +ANSI_CYAN+ dados[1] + " Numero da conta: "+ ANSI_CYAN + dados[0]+ANSI_RESET+"   |");
 		System.out.println("|  Tipo de conta: " +ANSI_CYAN+ dados[4]+ANSI_RESET+"                   |");
 		System.out.print("|  Saldo da conta: ");
-		if(Double.valueOf(dados[3]) < 0)
+		if(Double.valueOf(dados[2]) < 0)
 			System.out.print(ANSI_RED);
 		else 
 			System.out.print(ANSI_CYAN);
-		System.out.print(dados[3]);
-		System.out.println(ANSI_RESET+"                    |");		
-		System.out.println("|  Limite para compras: " +ANSI_CYAN+ dados[4]+ANSI_RESET+"             |");
-		System.out.println("==============================================");
-		System.out.println();
-		System.out.println();
+			System.out.print(dados[2]);
+			System.out.println(ANSI_RESET+"                    |");		
+			System.out.println("|  Limite para compras: " +ANSI_CYAN+ dados[3]+ANSI_RESET+"             |");
+			System.out.println("==============================================");
+			System.out.println();
+			System.out.println();
+		
+	}
+	
+	public static int questaoMenu(Scanner sc) {
+		System.out.println("Selecione uma das opções para continuar");
+		  System.out.println("8 - Voltar ao menu principal");
+		  System.out.println("9 - Sair");
+		  return sc.nextInt();
+		
+	}
+	public static double deposito(Scanner sc) {
+		System.out.println("Digite o valor a ser depositado");
+		return sc.nextDouble();
+		
+	}
+	
+	public static double saque(Scanner sc) {
+		System.out.println("Digite o valor a ser sacado");
+		return sc.nextDouble();
 		
 	}
 }
