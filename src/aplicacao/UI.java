@@ -1,5 +1,6 @@
 package aplicacao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -60,8 +61,9 @@ public class UI {
 			  System.out.println("3 - Saque");
 			  System.out.println("4 - Transferir");
 			  System.out.println("5 - Alterar dados da Conta");
-			  System.out.println("6 - Alterar limite do cartão");
+			  System.out.println("6 - Alterar limite");
 			  System.out.println("7 - Exportar dados de transações");
+			  
 			  System.out.println("8 - Voltar ao menu principal");
 			  System.out.println("9 - Sair");
 		    break;
@@ -107,9 +109,9 @@ public class UI {
 			System.out.print(ANSI_RED);
 		else 
 			System.out.print(ANSI_CYAN);
-			System.out.print(dados[2]);
+			System.out.printf("R$ %.2f",Double.valueOf(dados[2]));
 			System.out.println(ANSI_RESET+"                    |");		
-			System.out.println("|  Limite para compras: " +ANSI_CYAN+ dados[3]+ANSI_RESET+"             |");
+			System.out.println("|  Limite da conta: " +ANSI_CYAN+ dados[3]+ANSI_RESET+"             |");
 			System.out.println("==============================================");
 			System.out.println();
 			System.out.println();
@@ -132,6 +134,19 @@ public class UI {
 	public static double saque(Scanner sc) {
 		System.out.println("Digite o valor a ser sacado");
 		return sc.nextDouble();
+		
+	}
+	
+	public static double alterarLimite(Scanner sc) {
+		System.out.println("Digite o valor do novo Limite");
+		return sc.nextDouble();
+		
+	}
+	
+	public static double transferencia(Scanner sc) {
+		
+			System.out.println("Digite o valor da transferencia");
+			return sc.nextDouble();
 		
 	}
 }

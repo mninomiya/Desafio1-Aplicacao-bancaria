@@ -9,10 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ServicoConta {
 	
-   private final String ARQUIVO_CONTA = "C:\\Users\\mauricio.p.ninomiya\\eclipse-workspace\\Aplicacao_Bancaria\\bin\\acessos\\Contas.txt";
-   private final String ARQUIVO_TEMP = "C:\\Users\\mauricio.p.ninomiya\\eclipse-workspace\\Aplicacao_Bancaria\\bin\\acessos\\Temporario.txt";
+   private final String ARQUIVO_CONTA = "./acessos/Contas.txt";
+   private final String ARQUIVO_TEMP = "./acessos/Temporario.txt";
    private final String DELIMITADOR = ";";
    
    private String numeroDaConta;
@@ -39,7 +40,7 @@ public class ServicoConta {
                    } 
                } 
            }
-           return null;
+           return "";
        } catch (IOException e) {
            throw new ServicoExcecao("Erro ao ler o arquivo de credenciais: " + e.getMessage());
        }
@@ -74,6 +75,7 @@ public class ServicoConta {
             		  	break;
             		  	case 4:
         		  			//transferir
+            		  		
             		  	break;
             		  	case 5:
         		  			//Alterar dados
@@ -81,8 +83,7 @@ public class ServicoConta {
                 		break;
             		  	case 6:
         		  			//Alterar limite da conta
-            		  		novoValor = Double.valueOf(parts[3]) - quantidade;
-        		  			linha = parts[0]+";"+parts[1]+";"+parts[2]+";"+novoValor+";"+parts[4];
+        		  			linha = parts[0]+";"+parts[1]+";"+parts[2]+";"+quantidade+";"+parts[4];
                 		break; 
                 		default:
                 		break;

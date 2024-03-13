@@ -13,11 +13,12 @@ public class Programa {
 		String sair = "";
 		Scanner sc = new Scanner(System.in);
 		int contagem = 1;
-		int tipo=0;
-		int operacao;
-		double quantidade;
+		int tipo = 0;
+		int operacao = 0;
+		double valor = 0;
 		ContaBancaria contaBancaria = new ContaBancaria();
-		String conta;
+		String conta = "";
+		String contaDestino = "";
 		
 		UI.limparTela();
 		UI.bemVindoTela();
@@ -36,10 +37,19 @@ public class Programa {
 			}
         	UI.limparTela();
             System.out.println("Login bem-sucedido!");
-            conta = UI.buscaConta(sc);
+            while(conta.isBlank()) {
+            	conta = UI.buscaConta(sc);
+            	if (contaBancaria.verContaBancaria(conta).isBlank())
+	  			  {
+            		conta = "";
+            		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+            		UI.limparTela();
+	  			  }            	
+            }
+            UI.limparTela();
             operacao = UI.menuPrincipal(sc, tipo);
             while(sair != "sair") {	
-	            switch(operacao) {
+				switch(operacao) {
 		  		  case 1:
 		  			  //Ver dados da conta
 		  			  UI.limparTela();
@@ -49,8 +59,9 @@ public class Programa {
 		  		  case 2:
 		  			  // Deposito
 		  			  UI.limparTela();
-		  			  quantidade = UI.deposito(sc);
-		  			  contaBancaria.deposito(conta, quantidade, operacao);
+		  			  valor = UI.deposito(sc);
+		  			  UI.limparTela();
+		  			  contaBancaria.deposito(conta, valor, operacao);
 		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
 		  			  operacao = UI.questaoMenu(sc);
 		  			  
@@ -58,16 +69,50 @@ public class Programa {
 		  		  case 3:
 		  			  // Saque
 		  			  UI.limparTela();
-		  			  quantidade = UI.saque(sc);
-		  			  contaBancaria.saque(conta, quantidade, operacao);
+		  			  valor = UI.saque(sc);
+		  			  UI.limparTela();
+		  			  contaBancaria.saque(conta, valor, operacao);
 		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
 		  			  operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 4:
 		  			  // Transferência
 		  			  UI.limparTela();
+		  			  contaDestino = "";
+		  			  contagem = 1;
+		  			  while(contaDestino.isBlank()) {
+		  				contaDestino = UI.buscaConta(sc);
+						if (contaBancaria.verContaBancaria(contaDestino).isBlank())
+						  {
+							contaDestino = "";
+							System.out.println("Nenhuma conta destino encontrada. Verifique o número da conta destino");
+							UI.limparTela();
+						  } 
+						if(contagem > 5)
+						{
+							break;
+						}
+						contagem++;
+		  			  }
+		  			  if (!(contagem > 5) )
+		  			  {
+		  				 valor = UI.transferencia(sc); 
+		  				 UI.limparTela();
+		  				 contaBancaria.transferencia(conta, valor, contaDestino);
+		  				 System.out.println();
+		  				 System.out.println("Dados da conta origem");
+		  				 UI.mostrarConta(contaBancaria.verContaBancaria(conta));
+		  				 System.out.println();
+		  				 System.out.println("Dados da conta destino");
+		  				 UI.mostrarConta(contaBancaria.verContaBancaria(contaDestino));
+		  			  }
+		  			  else
+		  			  {
+		  				System.out.println("Conta Inválida repita a operação");
+		  			  }
+		  			 
 		  			  operacao = UI.questaoMenu(sc);
-		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
+		  			  
 		  		    break;
 		  		  case 5:
 		  			  // Alterar dados da conta
@@ -77,6 +122,9 @@ public class Programa {
 		  		  case 6:
 		  			  // Alterar limite do cartão
 		  			  UI.limparTela();
+		  			  valor = UI.alterarLimite(sc);
+		  			  contaBancaria.alterarLimite(conta, valor, operacao);
+		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
 		  			  operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 7:
