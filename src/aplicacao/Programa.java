@@ -1,7 +1,14 @@
 package aplicacao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
+import entidades.Cliente;
 import entidades.ContaBancaria;
 import servicos.ServicoExcecao;
 
@@ -19,6 +26,10 @@ public class Programa {
 		ContaBancaria contaBancaria = new ContaBancaria();
 		String conta = "";
 		String contaDestino = "";
+		Cliente cliente;
+		List<Object> dados = new ArrayList<>();
+		Date data = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
 		UI.limparTela();
 		UI.bemVindoTela();
@@ -46,7 +57,10 @@ public class Programa {
             		UI.limparTela();
 	  			  }            	
             }
+            
             UI.limparTela();
+            UI.bemVindoTela();
+            UI.mostrarConta(contaBancaria.verContaBancaria(conta));
             operacao = UI.menuPrincipal(sc, tipo);
             while(sair != "sair") {	
 				switch(operacao) {
@@ -115,9 +129,39 @@ public class Programa {
 		  			  
 		  		    break;
 		  		  case 5:
-		  			  // Alterar dados da conta
-		  			  UI.limparTela();
-		  			  UI.questaoMenu(sc);
+						// Criar conta bancária
+						UI.limparTela();
+						dados = UI.cadastrarCliente(sc);
+		  			 
+		  			  	String nome = String.valueOf(dados.get(0));		  			  	
+						int idCliente = (int)(data.getTime());
+						Date dataNasc = new Date();
+						try {
+							dataNasc = sdf.parse((String)dados.get(1));
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						String cpf = String.valueOf(dados.get(2));
+						String endereco = String.valueOf(dados.get(3));
+						int numero = Integer.parseInt((String)dados.get(4));
+						String complemento = String.valueOf(dados.get(5));
+		  			
+		  			
+						cliente = new Cliente(nome, idCliente, dataNasc, cpf, endereco, numero, complemento);
+						String numeroDaConta; 
+						String numeroAgencia;
+		  			  	double saldo;
+		  			  	double limite;
+		  			  	String tipoConta;
+		  			  	UI.cadastrarConta(sc);
+		  			  	numeroDaConta = 
+		  			  	numeroAgencia = String.valueOf(dados.get(0));
+		  			  	saldo = Double.parseDouble((String)dados.get(1));
+		  			  	limite = Double.parseDouble((String)dados.get(2));
+		  			  	tipoConta = String.valueOf(dados.get(3));
+		  			  	ContaBancaria criarContaBancaria = new ContaBancaria(numeroDaConta, numeroAgencia, saldo, limite, tipoConta, idCliente);
+		  			  	UI.questaoMenu(sc);
 		  		    break;
 		  		  case 6:
 		  			  // Alterar limite do cartão
@@ -130,6 +174,7 @@ public class Programa {
 		  		  case 7:
 		  			  // Exportar dados de transações
 		  			  UI.limparTela();
+		  			  contaBancaria.exportTransactionHistory();
 		  			  operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 8:

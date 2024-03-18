@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import entidades.Cliente;
+import entidades.ContaBancaria;
+
 
 public class ServicoConta {
 	
@@ -117,6 +120,11 @@ public class ServicoConta {
 	           
 	       }
    }
+
+public void criarConta(Cliente cliente, ContaBancaria conta) {
+	// TODO Auto-generated method stub
+	
+}
 
 
 }

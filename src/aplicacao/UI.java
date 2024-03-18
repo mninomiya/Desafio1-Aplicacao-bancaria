@@ -29,7 +29,8 @@ public class UI {
 	
 	
 	public static void bemVindoTela() {
-		System.out.println("Bem-vindo ao sistema bancário!");
+		System.out.println(ANSI_YELLOW+"Bem-vindo ao BM!"+ANSI_RESET);
+		System.out.println();
 	}
 	
 	
@@ -51,19 +52,17 @@ public class UI {
 	}
 	
 	public static int menuPrincipal(Scanner sc, int tipo) {
-		bemVindoTela();
 		System.out.println("Escolha uma das Operações abaixo:");
 		switch(tipo) {
 		  case 1:
 			  //Gerente
-			  System.out.println("1 - Ver dados da Conta");
+			  System.out.println("1 - Ver dados da conta");
 			  System.out.println("2 - Depósito");
 			  System.out.println("3 - Saque");
 			  System.out.println("4 - Transferir");
-			  System.out.println("5 - Alterar dados da Conta");
+			  System.out.println("5 - Criar conta bancária");
 			  System.out.println("6 - Alterar limite");
-			  System.out.println("7 - Exportar dados de transações");
-			  
+			  System.out.println("7 - Exportar dados de transações");			  
 			  System.out.println("8 - Voltar ao menu principal");
 			  System.out.println("9 - Sair");
 		    break;
@@ -73,7 +72,7 @@ public class UI {
 			  System.out.println("2 - Depósito");
 			  System.out.println("3 - Saque");
 			  System.out.println("4 - Transferir");
-			  System.out.println("5 - Alterar dados da Conta");
+			  System.out.println("5 - Criar conta bancária");
 			  System.out.println("8 - Voltar ao menu principal");
 			  System.out.println("9 - Sair");
 		    break;
@@ -98,23 +97,20 @@ public class UI {
 
 	public static void mostrarConta(String verContaBancaria) {
 		String[] dados = verContaBancaria.split(DELIMITADOR);
-		System.out.print(ANSI_RESET);
-		System.out.println("==============================================");
-		System.out.println("|    "+ANSI_YELLOW+"          Detalhes da conta"+ANSI_RESET+"             |");
-		System.out.println("==============================================");
-		System.out.println("|  Agencia: " +ANSI_CYAN+ dados[1] + " Numero da conta: "+ ANSI_CYAN + dados[0]+ANSI_RESET+"   |");
-		System.out.println("|  Tipo de conta: " +ANSI_CYAN+ dados[4]+ANSI_RESET+"                   |");
-		System.out.print("|  Saldo da conta: ");
-		if(Double.valueOf(dados[2]) < 0)
-			System.out.print(ANSI_RED);
-		else 
-			System.out.print(ANSI_CYAN);
-			System.out.printf("R$ %.2f",Double.valueOf(dados[2]));
-			System.out.println(ANSI_RESET+"                    |");		
-			System.out.println("|  Limite da conta: " +ANSI_CYAN+ dados[3]+ANSI_RESET+"             |");
-			System.out.println("==============================================");
-			System.out.println();
-			System.out.println();
+        StringBuilder sb = new StringBuilder();
+        double saldo = Double.parseDouble(dados[2]);
+        double limite = Double.parseDouble(dados[3]);
+        
+        sb.append("    ==============================================\n");
+        sb.append("    |    ").append(ANSI_YELLOW).append(String.format("%-40s", "         Detalhes da conta")).append(ANSI_RESET).append("|\n");
+        sb.append("    ==============================================\n");
+        sb.append("    |  ").append(String.format("%-56s", "Agencia: " + ANSI_CYAN + dados[1]+ ANSI_RESET + " Numero da conta: " + ANSI_CYAN + dados[0])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-47s", "Tipo de conta: " + ANSI_CYAN + dados[4])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-47s", "Saldo da conta: " + (saldo < 0 ? ANSI_RED : ANSI_CYAN) + String.format("R$ %.2f", saldo))).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-47s", "Limite da conta: " + ANSI_CYAN + String.format("R$ %.2f", limite))).append(ANSI_RESET).append("|\n");
+        sb.append("    ==============================================\n\n\n");
+
+        System.out.println(sb.toString());
 		
 	}
 	
@@ -141,6 +137,64 @@ public class UI {
 		System.out.println("Digite o valor do novo Limite");
 		return sc.nextDouble();
 		
+	}
+	
+	public static List<Object> cadastrarCliente(Scanner sc) {
+		
+		System.out.println("*****************************************");
+		System.out.println("*        Cadastro de Cliente            *");
+		System.out.println("*****************************************");
+		sc.nextLine();
+		
+		List<Object> dados = new ArrayList<>();
+
+		System.out.println("Nome: ");
+		dados.add(sc.nextLine());
+
+		System.out.println("Data de Nascimento (dd/mm/aaaa): ");
+		dados.add(sc.nextLine());
+
+		System.out.println("CPF: ");
+		dados.add(sc.nextLine());
+
+		System.out.println("Endereço: ");
+		dados.add(sc.nextLine());
+
+		System.out.println("Número: ");
+		dados.add(Integer.toString(sc.nextInt()));
+
+		// Consumir a nova linha pendente após o nextInt()
+		sc.nextLine();
+
+		System.out.println("Complemento: ");
+		dados.add(sc.nextLine());
+
+
+		return dados;
+	}
+	
+public static List<Object> cadastrarConta(Scanner sc) {
+		
+		System.out.println("*****************************************");
+		System.out.println("*        Cadastro de Conta            *");
+		System.out.println("*****************************************");
+		sc.nextLine();
+		
+		List<Object> dados = new ArrayList<>();
+
+		System.out.println("Numero da agencia: ");
+		dados.add(sc.nextLine());
+
+		System.out.println("Saldo: ");
+		dados.add(sc.nextLine());
+
+		System.out.println("limite: ");
+		dados.add(sc.nextLine());
+
+		System.out.println("Tipo de conta: ");
+		dados.add(sc.nextLine());
+
+		return dados;
 	}
 	
 	public static double transferencia(Scanner sc) {

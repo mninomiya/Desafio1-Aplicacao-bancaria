@@ -1,9 +1,11 @@
 package entidades;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import servicos.ServicoLogin;
 import servicos.ServicoConta;
 
 public class ContaBancaria {
@@ -13,19 +15,31 @@ public class ContaBancaria {
 	private double limite;
 	private String tipoConta;
 	private ServicoConta servicoConta = new ServicoConta();
-	private List<Transacao> historicoTransacao;
+	private List<Transacao> historicoTransacao = new ArrayList<>();
 	private String conta;
+	private int idCliente;
 	
-	
-	
-	public ContaBancaria () {
+	public ContaBancaria(String numeroDaConta, String numeroAgencia, double saldo, double limite, String tipoConta,
+			int idCliente) {
+		super();
 		this.numeroDaConta = numeroDaConta;
-        this.numeroAgencia = numeroAgencia;
-        this.saldo = saldo;
-        this.limite = limite;
-        this.tipoConta = tipoConta;
+		this.numeroAgencia = numeroAgencia;
+		this.saldo = saldo;
+		this.limite = limite;
+		this.tipoConta = tipoConta;
+		this.idCliente = idCliente;
+
 	}
-	
+
+	public ContaBancaria() {
+		this.idCliente = 0;
+		this.numeroDaConta = "";
+		this.numeroAgencia = "";
+		this.saldo = 0;
+		this.limite = 0;
+		this.tipoConta = "";
+	}
+
 	public String verContaBancaria(String numeroDaConta){
 		String informacoesConta;
 		
@@ -33,7 +47,13 @@ public class ContaBancaria {
 		
 		return informacoesConta;
 	}
-
+	
+	public void criarConta(Cliente cliente, ContaBancaria conta){
+			
+		 servicoConta.criarConta(cliente, conta);
+		
+	}
+	
 	public String getNumeroDaConta() {
 		return numeroDaConta;
 	}
@@ -58,27 +78,28 @@ public class ContaBancaria {
 		return tipoConta;
 	}
 	
-	public void deposito(String conta, double quantidade, int tipo) {
-	        if (quantidade > 0) {
-	            servicoConta.atualizaConta(conta, quantidade, tipo);
-	            //Transacao transacao = new Transacao(quantidade, this, this);
-	           // historicoTransacao.add(transacao);
+	public void deposito(String conta, double valor, int tipo) {
+	        if (valor > 0) {
+	            servicoConta.atualizaConta(conta, valor, tipo);
+	            Transacao transacao = new Transacao(valor, conta, conta, "deposito");
+	            System.out.println(transacao.getContaDestino());
+	            historicoTransacao.add(transacao);
 	        } else {
 	            System.out.println("Quantidade inválida para o depósito");
 	    }
 	}
-	public void saque(String conta, double quantidade, int tipo) {
+	public void saque(String conta, double valor, int tipo) {
 			this.conta = verContaBancaria(conta);
 			String[] parts = this.conta.split(";");
 			this.saldo = Double.parseDouble(parts[2]);
 			this.limite = Double.parseDouble(parts[3]);
-	    if (quantidade > 0 && saldo + limite >= quantidade) {
-	        servicoConta.atualizaConta(conta, quantidade, tipo);
+	    if (valor > 0 && saldo + limite >= valor) {
+	        servicoConta.atualizaConta(conta, valor, tipo);
 	        if(saldo<0) {
-	        	alterarLimite(conta, limite-quantidade, 6);
+	        	alterarLimite(conta, limite-valor, 6);
 	        }
-	       // Transacao transacao = new Transacao(quantidade, this, this);
-	        //historicoTransacao.add(transacao);
+	        Transacao transacao = new Transacao(valor, conta, conta, "saque");
+            historicoTransacao.add(transacao);
 	    } else {
 	    		System.out.println("Saldo insuficiente para a realização do saque.");
 	    		
@@ -97,26 +118,38 @@ public class ContaBancaria {
 	    }
 	}
 	
-	public void transferencia(String conta, double quantidade, String contaDestino) {
+	public void transferencia(String conta, double valor, String contaDestino) {
 		this.conta = verContaBancaria(conta);
 		String[] parts = this.conta.split(";");
 		this.saldo = Double.parseDouble(parts[2]);
 		this.limite = Double.parseDouble(parts[3]);
-	    if (quantidade > 0 && saldo + limite >= quantidade) { 	
-	        servicoConta.atualizaConta(conta, quantidade, 3);
+	    if (valor > 0 && saldo + limite >= valor) { 	
+	        servicoConta.atualizaConta(conta, valor, 3);
 	        if(saldo<0) {
-	        	alterarLimite(conta, limite-quantidade, 6);
+	        	alterarLimite(conta, limite-valor, 6);
 	        }
-	        servicoConta.atualizaConta(contaDestino, quantidade, 2);
-	        //Transacao transacao = new Transacao(quantidade, this, contaDestino);
-	       // historicoTransacao.add(transacao);
+	        servicoConta.atualizaConta(contaDestino, valor, 2);
+	        Transacao transacao = new Transacao(valor, conta, contaDestino, "transferencia");
+            historicoTransacao.add(transacao);
 	    } else {
 	    	System.out.println("Saldo insuficiente ou valor inválido para a transferência.");
 	    }
 	}
 	
 	public void exportTransactionHistory() {
-	    // Implementação para exportar o histórico de transações, por exemplo, para um arquivo CSV.
+		String nomeArquivo = "historicoTransacoes.csv";
+		String caminhoDownloads = System.getProperty("user.home") + "\\Downloads\\" + nomeArquivo;
+        try (PrintWriter writer = new PrintWriter(new FileWriter(caminhoDownloads))) {
+            writer.println("Conta Origem, Conta Destino, Valor, Operação,  Data e Hora");
+            for (Transacao transacao : historicoTransacao) {
+            	writer.println(transacao.getContaOrigem() + "," + transacao.getContaDestino() + "," + transacao.getValor() + "," + transacao.getOperacao() + "," + transacao.getDataHora());
+            }
+            System.out.println();
+            System.out.println("Transações foram exportadas para a pasta de Downloads com sucesso! Nome do arquivo gerado: " + nomeArquivo);
+            System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
 }
