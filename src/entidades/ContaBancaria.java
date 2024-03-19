@@ -3,6 +3,7 @@ package entidades;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class ContaBancaria {
 	
 	public ContaBancaria(String numeroDaConta, String numeroAgencia, double saldo, double limite, String tipoConta,
 			int idCliente) {
-		super();
 		this.numeroDaConta = numeroDaConta;
 		this.numeroAgencia = numeroAgencia;
 		this.saldo = saldo;
@@ -78,6 +78,16 @@ public class ContaBancaria {
 		return tipoConta;
 	}
 	
+	public int getIdCliente() {
+		return idCliente;
+	}
+	
+	public String gerarNumero() {
+		
+		numeroDaConta = servicoConta.gerarNumero();
+		return numeroDaConta;
+	}
+	
 	public void deposito(String conta, double valor, int tipo) {
 	        if (valor > 0) {
 	            servicoConta.atualizaConta(conta, valor, tipo);
@@ -123,17 +133,24 @@ public class ContaBancaria {
 		String[] parts = this.conta.split(";");
 		this.saldo = Double.parseDouble(parts[2]);
 		this.limite = Double.parseDouble(parts[3]);
-	    if (valor > 0 && saldo + limite >= valor) { 	
-	        servicoConta.atualizaConta(conta, valor, 3);
-	        if(saldo<0) {
-	        	alterarLimite(conta, limite-valor, 6);
-	        }
-	        servicoConta.atualizaConta(contaDestino, valor, 2);
-	        Transacao transacao = new Transacao(valor, conta, contaDestino, "transferencia");
-            historicoTransacao.add(transacao);
-	    } else {
-	    	System.out.println("Saldo insuficiente ou valor inválido para a transferência.");
-	    }
+		LocalTime horaAtual = LocalTime.now();
+
+        // Define os limites do intervalo de horas desejado
+        LocalTime horaInicio = LocalTime.of(22, 0); // 23h
+        LocalTime horaFim = LocalTime.of(6, 0);//06h
+        
+		if(valor>200 && horaAtual.isAfter(horaInicio) && horaAtual.isBefore(horaFim)) {		
+			System.out.println("Valor inserido é maior que o valor permitido para esse horario");
+		} else {
+			if (valor > 0 && saldo + limite >= valor) { 	
+		        servicoConta.atualizaConta(conta, valor, 3);
+		        servicoConta.atualizaConta(contaDestino, valor, 2);
+		        Transacao transacao = new Transacao(valor, conta, contaDestino, "transferencia");
+	            historicoTransacao.add(transacao);
+		    } else {
+		    	System.out.println("Saldo insuficiente ou valor inválido para a transferência.");
+		    }
+		}
 	}
 	
 	public void exportTransactionHistory() {
@@ -151,5 +168,7 @@ public class ContaBancaria {
             e.printStackTrace();
         }
 	}
+
+	
 
 }

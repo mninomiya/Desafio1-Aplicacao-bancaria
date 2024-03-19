@@ -1,5 +1,8 @@
 package aplicacao;
 
+
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -89,26 +92,37 @@ public class UI {
 		return sc.nextInt();
 	}
 	
-	public static String buscaConta(Scanner sc) {
-		 System.out.println("Por favor digite o número da conta");
+	public static String digitaConta(Scanner sc, Boolean transf) {
+		if (transf) {
+			 System.out.println("Por favor insira o número da conta de destino");
+		}else {
+			 System.out.println("Por favor insira o número da conta");
+		}
+		
 		 return sc.nextLine();
 	}
 
 
-	public static void mostrarConta(String verContaBancaria) {
+	public static void mostrarConta(String verContaBancaria, String cliente) {
 		String[] dados = verContaBancaria.split(DELIMITADOR);
+		String[] dadosCliente = cliente.split(DELIMITADOR);
         StringBuilder sb = new StringBuilder();
         double saldo = Double.parseDouble(dados[2]);
-        double limite = Double.parseDouble(dados[3]);
+        double limite = Double.parseDouble(dados[3]);   
         
-        sb.append("    ==============================================\n");
-        sb.append("    |    ").append(ANSI_YELLOW).append(String.format("%-40s", "         Detalhes da conta")).append(ANSI_RESET).append("|\n");
-        sb.append("    ==============================================\n");
-        sb.append("    |  ").append(String.format("%-56s", "Agencia: " + ANSI_CYAN + dados[1]+ ANSI_RESET + " Numero da conta: " + ANSI_CYAN + dados[0])).append(ANSI_RESET).append("|\n");
-        sb.append("    |  ").append(String.format("%-47s", "Tipo de conta: " + ANSI_CYAN + dados[4])).append(ANSI_RESET).append("|\n");
-        sb.append("    |  ").append(String.format("%-47s", "Saldo da conta: " + (saldo < 0 ? ANSI_RED : ANSI_CYAN) + String.format("R$ %.2f", saldo))).append(ANSI_RESET).append("|\n");
-        sb.append("    |  ").append(String.format("%-47s", "Limite da conta: " + ANSI_CYAN + String.format("R$ %.2f", limite))).append(ANSI_RESET).append("|\n");
-        sb.append("    ==============================================\n\n\n");
+        sb.append("    =====================================================================\n");
+        sb.append("    |                ").append(ANSI_YELLOW).append(String.format("%-51s", "         Detalhes da conta")).append(ANSI_RESET).append("|\n");
+        sb.append("    =====================================================================\n");
+        sb.append("    |  ").append(String.format("%-70s", "idCliente: " + ANSI_CYAN + dadosCliente[1])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-70s", "Nome: " + ANSI_CYAN + dadosCliente[0])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-70s", "Data de Nascimento: " + ANSI_CYAN + dadosCliente[2])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-70s", "CPF: " + ANSI_CYAN + dadosCliente[3])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-79s", "Endereço: " + ANSI_CYAN + dadosCliente[4]+","+dadosCliente[5]+ ANSI_RESET + " Complemento: " + ANSI_CYAN + dadosCliente[6])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-79s", "Agência: " + ANSI_CYAN + dados[1]+ ANSI_RESET + " Número da conta: " + ANSI_CYAN + dados[0])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-70s", "Tipo de conta: " + ANSI_CYAN + dados[4])).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-70s", "Saldo da conta: " + (saldo < 0 ? ANSI_RED : ANSI_CYAN) + String.format("R$ %.2f", saldo))).append(ANSI_RESET).append("|\n");
+        sb.append("    |  ").append(String.format("%-70s", "Limite da conta: " + ANSI_CYAN + String.format("R$ %.2f", limite))).append(ANSI_RESET).append("|\n");
+        sb.append("    =====================================================================\n\n\n");
 
         System.out.println(sb.toString());
 		
@@ -141,32 +155,35 @@ public class UI {
 	
 	public static List<Object> cadastrarCliente(Scanner sc) {
 		
-		System.out.println("*****************************************");
-		System.out.println("*        Cadastro de Cliente            *");
-		System.out.println("*****************************************");
+		System.out.println("    ==============================================\n");
+		System.out.println("    |         "+ANSI_YELLOW+" Cadastro da nova conta"+ANSI_RESET+"            |");
+		System.out.println("    ==============================================\n");
+		System.out.println();
+		System.out.println("    |       Dados do Cliente            |");
+		System.out.println();
 		sc.nextLine();
 		
 		List<Object> dados = new ArrayList<>();
 
-		System.out.println("Nome: ");
+		System.out.println("    Nome: ");
 		dados.add(sc.nextLine());
 
-		System.out.println("Data de Nascimento (dd/mm/aaaa): ");
+		System.out.println("    Data de Nascimento (dd/mm/aaaa): ");
 		dados.add(sc.nextLine());
 
-		System.out.println("CPF: ");
+		System.out.println("    CPF: ");
 		dados.add(sc.nextLine());
 
-		System.out.println("Endereço: ");
+		System.out.println("    Endereço: ");
 		dados.add(sc.nextLine());
 
-		System.out.println("Número: ");
+		System.out.println("    Número: ");
 		dados.add(Integer.toString(sc.nextInt()));
 
 		// Consumir a nova linha pendente após o nextInt()
 		sc.nextLine();
 
-		System.out.println("Complemento: ");
+		System.out.println("    Complemento: ");
 		dados.add(sc.nextLine());
 
 
@@ -175,23 +192,23 @@ public class UI {
 	
 public static List<Object> cadastrarConta(Scanner sc) {
 		
-		System.out.println("*****************************************");
-		System.out.println("*        Cadastro de Conta            *");
-		System.out.println("*****************************************");
-		sc.nextLine();
+		System.out.println();
+		System.out.println("    |        Dados da Conta            |");
+		System.out.println();
+
 		
 		List<Object> dados = new ArrayList<>();
 
-		System.out.println("Numero da agencia: ");
+		System.out.println("    Numero da agencia: ");
 		dados.add(sc.nextLine());
 
-		System.out.println("Saldo: ");
+		System.out.println("    Saldo: ");
 		dados.add(sc.nextLine());
 
-		System.out.println("limite: ");
+		System.out.println("    limite: ");
 		dados.add(sc.nextLine());
 
-		System.out.println("Tipo de conta: ");
+		System.out.println("    Tipo de conta: ");
 		dados.add(sc.nextLine());
 
 		return dados;

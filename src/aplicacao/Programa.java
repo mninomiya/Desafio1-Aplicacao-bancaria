@@ -26,9 +26,12 @@ public class Programa {
 		ContaBancaria contaBancaria = new ContaBancaria();
 		String conta = "";
 		String contaDestino = "";
-		Cliente cliente;
+		int idCliente = 0;
+		Cliente cliente = new Cliente();
+		String dadosConta="";
 		List<Object> dados = new ArrayList<>();
 		Date data = new Date();
+		String temp = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
 		UI.limparTela();
@@ -48,54 +51,85 @@ public class Programa {
 			}
         	UI.limparTela();
             System.out.println("Login bem-sucedido!");
-            while(conta.isBlank()) {
-            	conta = UI.buscaConta(sc);
-            	if (contaBancaria.verContaBancaria(conta).isBlank())
-	  			  {
-            		conta = "";
-            		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
-            		UI.limparTela();
-	  			  }            	
-            }
-            
-            UI.limparTela();
             UI.bemVindoTela();
-            UI.mostrarConta(contaBancaria.verContaBancaria(conta));
             operacao = UI.menuPrincipal(sc, tipo);
             while(sair != "sair") {	
 				switch(operacao) {
 		  		  case 1:
 		  			  //Ver dados da conta
+		              while(conta.isBlank()) {
+		              	conta = UI.digitaConta(sc, false);
+		              	if (contaBancaria.verContaBancaria(conta).isBlank())
+		  	  			  {
+		              		conta = "";
+		              		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+		              		UI.limparTela();
+		  	  			  }            	
+		              }		           
 		  			  UI.limparTela();
-		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta)); 
+		  			  dadosConta = contaBancaria.verContaBancaria(conta);
+		  			  idCliente = Integer.valueOf(dadosConta.split(";")[5]);
+		  			  UI.mostrarConta(dadosConta, cliente.verCliente(idCliente)); 
 		  			  operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 2:
 		  			  // Deposito
+		              while(conta.isBlank()) {
+		              	conta = UI.digitaConta(sc, false);
+		              	if (contaBancaria.verContaBancaria(conta).isBlank())
+		  	  			  {
+		              		conta = "";
+		              		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+		              		UI.limparTela();
+		  	  			  }            	
+		              }
 		  			  UI.limparTela();
 		  			  valor = UI.deposito(sc);
 		  			  UI.limparTela();
 		  			  contaBancaria.deposito(conta, valor, operacao);
-		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
+		  			  dadosConta = contaBancaria.verContaBancaria(conta);
+		  			  idCliente = Integer.valueOf(dadosConta.split(";")[5]);
+
+		  			  UI.mostrarConta(dadosConta, cliente.verCliente(idCliente));
 		  			  operacao = UI.questaoMenu(sc);
 		  			  
 		  		    break;
 		  		  case 3:
 		  			  // Saque
+			  			while(conta.isBlank()) {
+			            	conta = UI.digitaConta(sc, false);
+			            	if (contaBancaria.verContaBancaria(conta).isBlank())
+				  			  {
+			            		conta = "";
+			            		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+			            		UI.limparTela();
+				  			  }            	
+			            }
 		  			  UI.limparTela();
 		  			  valor = UI.saque(sc);
 		  			  UI.limparTela();
 		  			  contaBancaria.saque(conta, valor, operacao);
-		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
+		  			  dadosConta = contaBancaria.verContaBancaria(conta);
+		  			  idCliente = Integer.valueOf(dadosConta.split(";")[5]);
+		  			  UI.mostrarConta(dadosConta, cliente.verCliente(idCliente));
 		  			  operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 4:
 		  			  // Transferência
+			  			while(conta.isBlank()) {
+			            	conta = UI.digitaConta(sc, false);
+			            	if (contaBancaria.verContaBancaria(conta).isBlank())
+				  			  {
+			            		conta = "";
+			            		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+			            		UI.limparTela();
+				  			  }            	
+			            }
 		  			  UI.limparTela();
 		  			  contaDestino = "";
 		  			  contagem = 1;
 		  			  while(contaDestino.isBlank()) {
-		  				contaDestino = UI.buscaConta(sc);
+		  				contaDestino = UI.digitaConta(sc, true);
 						if (contaBancaria.verContaBancaria(contaDestino).isBlank())
 						  {
 							contaDestino = "";
@@ -115,14 +149,18 @@ public class Programa {
 		  				 contaBancaria.transferencia(conta, valor, contaDestino);
 		  				 System.out.println();
 		  				 System.out.println("Dados da conta origem");
-		  				 UI.mostrarConta(contaBancaria.verContaBancaria(conta));
+		  				 dadosConta = contaBancaria.verContaBancaria(conta);
+			  			 idCliente = Integer.valueOf(dadosConta.split(";")[5]);
+		  				 UI.mostrarConta(dadosConta, cliente.verCliente(idCliente));
 		  				 System.out.println();
 		  				 System.out.println("Dados da conta destino");
-		  				 UI.mostrarConta(contaBancaria.verContaBancaria(contaDestino));
+		  				 dadosConta = contaBancaria.verContaBancaria(contaDestino);
+			  			 int idClienteDestino = Integer.valueOf(dadosConta.split(";")[5]);
+		  				 UI.mostrarConta(dadosConta, cliente.verCliente(idClienteDestino));
 		  			  }
 		  			  else
 		  			  {
-		  				System.out.println("Conta Inválida repita a operação");
+		  				System.out.println("Conta inválida repita a operação");
 		  			  }
 		  			 
 		  			  operacao = UI.questaoMenu(sc);
@@ -134,14 +172,9 @@ public class Programa {
 						dados = UI.cadastrarCliente(sc);
 		  			 
 		  			  	String nome = String.valueOf(dados.get(0));		  			  	
-						int idCliente = (int)(data.getTime());
-						Date dataNasc = new Date();
-						try {
-							dataNasc = sdf.parse((String)dados.get(1));
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						idCliente = (int)(data.getTime());
+						String dataNasc = String.valueOf(dados.get(1));
+						
 						String cpf = String.valueOf(dados.get(2));
 						String endereco = String.valueOf(dados.get(3));
 						int numero = Integer.parseInt((String)dados.get(4));
@@ -154,25 +187,50 @@ public class Programa {
 		  			  	double saldo;
 		  			  	double limite;
 		  			  	String tipoConta;
-		  			  	UI.cadastrarConta(sc);
-		  			  	numeroDaConta = 
+		  			  	dados = UI.cadastrarConta(sc);
+		  			  	
+		  			  	numeroDaConta = contaBancaria.gerarNumero();
 		  			  	numeroAgencia = String.valueOf(dados.get(0));
-		  			  	saldo = Double.parseDouble((String)dados.get(1));
-		  			  	limite = Double.parseDouble((String)dados.get(2));
+		  			  	temp = String.valueOf(dados.get(1)).replace(",", ".");
+		  			  	saldo = Double.parseDouble(temp);
+		  			  	temp = String.valueOf(dados.get(1)).replace(",", ".");
+		  			  	limite = Double.parseDouble(temp);
 		  			  	tipoConta = String.valueOf(dados.get(3));
-		  			  	ContaBancaria criarContaBancaria = new ContaBancaria(numeroDaConta, numeroAgencia, saldo, limite, tipoConta, idCliente);
-		  			  	UI.questaoMenu(sc);
+		  			  	contaBancaria = new ContaBancaria(numeroDaConta, numeroAgencia, saldo, limite, tipoConta, idCliente);
+		  			  	contaBancaria.criarConta(cliente, contaBancaria);
+
+		  			  	UI.mostrarConta(contaBancaria.verContaBancaria(numeroDaConta), cliente.verCliente(idCliente));
+		  			  	
+		  			  	operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 6:
 		  			  // Alterar limite do cartão
+		  			while(conta.isBlank()) {
+		            	conta = UI.digitaConta(sc, false);
+		            	if (contaBancaria.verContaBancaria(conta).isBlank())
+			  			  {
+		            		conta = "";
+		            		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+		            		UI.limparTela();
+			  			  }            	
+		            }
 		  			  UI.limparTela();
 		  			  valor = UI.alterarLimite(sc);
 		  			  contaBancaria.alterarLimite(conta, valor, operacao);
-		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta));
+		  			  UI.mostrarConta(contaBancaria.verContaBancaria(conta), cliente.verCliente(idCliente));
 		  			  operacao = UI.questaoMenu(sc);
 		  		    break;
 		  		  case 7:
 		  			  // Exportar dados de transações
+			  			while(conta.isBlank()) {
+			            	conta = UI.digitaConta(sc, false);
+			            	if (contaBancaria.verContaBancaria(conta).isBlank())
+				  			  {
+			            		conta = "";
+			            		System.out.println("Nenhuma conta encontrada. Verifique o número da conta");
+			            		UI.limparTela();
+				  			  }            	
+			            }
 		  			  UI.limparTela();
 		  			  contaBancaria.exportTransactionHistory();
 		  			  operacao = UI.questaoMenu(sc);
