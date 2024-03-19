@@ -17,8 +17,9 @@ Passo 10: Realizar saque opção 3 com valor negativo e voltar ao menu (opção 
 Passo 11: Alterar limite opção 6 e voltar ao menu (opção 8)  
 Passo 12: Alterar limite opção 6 com valor negativo e voltar ao menu (opção 8)  
 Passo 13: Realizar transferencia opção 4, digitar conta de destino, valor e voltar ao menu (opção 8)  
-Passo 14: Realizar transferencia opção 4 com valor maior que saldo + limite e voltar ao menu (opção 8)  
-Passo 15: Realizar transferencia opção 4 com valor maior que 200 após 22h e voltar ao menu (opção 8)  
-Passo 16: Realizar transferencia opção 4 e voltar ao menu (opção 8)  
-Passo 17: Criar conta bancária opção 5, ver os detalhes e voltar ao menu (opção 8)  
-Passo 18: Exportar as transações opção 7 e olhar na pasta downloads  
+Passo 14: Realizar transferencia opção 4, digitar conta de destino, com valor maior que saldo + limite e voltar ao menu (opção 8)  
+Passo 15: Realizar transferencia opção 4, digitar conta de destino, com valor maior que 200 após 22h e voltar ao menu (opção 8)  
+Passo 16: Realizar transferencia opção 4, digitar conta de destino, inserir valor negativo e voltar ao menu (opção 8)
+Passo 17: Exportar as transações opção 7 e olhar na pasta downloads  
+Passo 18: Criar conta bancária opção 5, ver os detalhes e voltar ao menu (opção 8)  
+  

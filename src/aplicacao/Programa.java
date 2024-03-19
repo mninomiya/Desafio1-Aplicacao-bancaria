@@ -193,7 +193,7 @@ public class Programa {
 		  			  	numeroAgencia = String.valueOf(dados.get(0));
 		  			  	temp = String.valueOf(dados.get(1)).replace(",", ".");
 		  			  	saldo = Double.parseDouble(temp);
-		  			  	temp = String.valueOf(dados.get(1)).replace(",", ".");
+		  			  	temp = String.valueOf(dados.get(2)).replace(",", ".");
 		  			  	limite = Double.parseDouble(temp);
 		  			  	tipoConta = String.valueOf(dados.get(3));
 		  			  	contaBancaria = new ContaBancaria(numeroDaConta, numeroAgencia, saldo, limite, tipoConta, idCliente);
